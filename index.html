@@ -1,0 +1,209 @@
+<!doctype html>
+<head>
+  <title>
+    Slideshow Images
+  </title>
+  <style>
+    body,
+html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+/* particles */
+#tsparticles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* Algemene stijl voor de container */
+.slideshow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px; /* Pas de breedte aan naar wens */
+  height: 333px; /* Pas de hoogte aan naar wens */
+  overflow: hidden;
+  border-radius: 10px; /* Optioneel: afgeronde hoeken */
+  border: 8px solid black;
+  outline: 12px solid #222;
+}
+
+/* Stijl voor elke afbeelding */
+.slideshow img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.5s ease, transform 1.5s ease; /* Gecombineerde overgang voor fading en scaling */
+  transform-origin: center center;
+}
+
+/* Vertrekkende afbeelding: fading en uitzoomen */
+.slideshow img.fade-out {
+  opacity: 0;
+  transform: scale(1.2); /* Uitzoomen */
+}
+
+/* Nieuwe afbeelding: fading en inzoomen van klein naar groot */
+.slideshow img.fade-in {
+  opacity: 1;
+  transform: scale(1); /* Terug naar normale grootte */
+  z-index: 1;
+}
+
+/*responsiveness*/
+@media (max-width: 768px) {
+  .slideshow {
+    width: 80%;
+    top: 50%;
+  }
+}
+
+  </style>
+  <body>
+    <div id="tsparticles"></div>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.0/tsparticles.bundle.min.js"></script>
+
+<div class="slideshow">
+  <!-- Credits photos:  https://larsvandegoor.com -->
+  <img src="https://iili.io/2ofb7kl.webp" alt="Slide 1" class="fade-in">
+  <img src="https://iili.io/2ofb574.webp" alt="Slide 2">
+  <img src="https://iili.io/2ofbYp2.webp" alt="Slide 3">
+  <img src="https://iili.io/2ofbcIS.webp" alt="Slide 4">
+  <img src="https://iili.io/2ofbR2f.webp" alt="Slide 5">
+  <img src="https://iili.io/2oftvwP.webp" alt="Slide 6">
+  <img src="https://iili.io/2oftUoF.webp" alt="Slide 7">
+  <img src="https://iili.io/2oftgMg.webp" alt="Slide 8">
+  <img src="https://iili.io/2oft6KJ.webp" alt="Slide 9">
+  <img src="https://iili.io/2oftrPa.webp" alt="Slide 10">
+
+  <img src="https://iili.io/2oftPcv.webp" alt="Slide 11">
+  <img src="https://iili.io/2oftiSR.webp" alt="Slide 12">
+  <img src="https://iili.io/2oftQAN.webp" alt="Slide 13">
+  <img src="https://iili.io/2oftZNI.webp" alt="Slide 14">
+</div>
+    
+<script>
+	//particles js
+
+tsParticles.load("tsparticles", {
+  particles: {
+    number: {
+      value: 30, // Aantal particles, pas aan indien nodig
+      density: {
+        enable: true,
+        value_area: 800
+      }
+    },
+    shape: {
+      type: "image",
+      image: [
+        {
+          src: "https://iili.io/2ofIXAN.png",
+          width: 34,
+          height: 50
+        },
+        {
+          src: "https://iili.io/2ofIW9p.png",
+          width: 50,
+          height: 50
+        },
+        {
+          src: "https://iili.io/2ofIMSR.png",
+          width: 19,
+          height: 50
+        },
+        {
+          src: "https://iili.io/2ofSQuj.png",
+          width: 48,
+          height: 50
+        }
+        // Voeg meer afbeeldingen toe indien gewenst
+        // Voeg meer afbeeldingen toe indien gewenst
+      ]
+    },
+    opacity: {
+      value: 0.9,
+      random: true
+    },
+    size: {
+      value: 10, // Gebruik een vaste grootte die overeenkomt met de afbeelding
+      random: false // Uitschakelen voor consistente grootte
+    },
+    move: {
+      enable: true,
+      speed: 2, // Snelheid waarmee bladeren vallen
+      direction: "bottom", // Richting naar beneden
+      random: true,
+      straight: false, // Laat ze dwarrelen in plaats van recht vallen
+      out_mode: "out", // Particles gaan uit beeld en verdwijnen
+      bounce: false
+    },
+    rotate: {
+      value: 45, // Rotatie van de afbeelding
+      random: true,
+      animation: {
+        enable: true,
+        speed: 10, // Draaisnelheid
+        sync: false
+      }
+    }
+  },
+  interactivity: {
+    events: {
+      onhover: {
+        enable: false // Geen interactie bij hover
+      },
+      onclick: {
+        enable: true,
+        mode: "push" // Voeg meer particles toe bij klik
+      }
+    },
+    modes: {
+      push: {
+        particles_nb: 4
+      }
+    }
+  },
+  retina_detect: true
+});
+
+//end particles
+
+// JavaScript voor de zoom-in fading slideshow
+let currentIndex = 0;
+const slides = document.querySelectorAll(".slideshow img");
+const totalSlides = slides.length;
+const intervalTime = 4000; // Tijd in milliseconden tussen slides
+
+function showNextSlide() {
+  // Verwijder fade-in van huidige afbeelding en voeg fade-out toe
+  slides[currentIndex].classList.remove("fade-in");
+  slides[currentIndex].classList.add("fade-out");
+
+  // Verhoog de index voor de volgende slide
+  currentIndex = (currentIndex + 1) % totalSlides;
+
+  // Bereid de nieuwe slide voor door de juiste class toe te voegen
+  slides[currentIndex].classList.remove("fade-out");
+  slides[currentIndex].classList.add("fade-in");
+}
+
+// Start de slideshow
+setInterval(showNextSlide, intervalTime);
+
+</script>
+  </body>
+  
